@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue Basics</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Охотник на чудовищ</h1>
+    </header>
+    <div id="game">
+      <section id="monster" class="container">
+        <h2>Чудовище</h2>
+        <img
+          class="avatar"
+          src="https://s1.1zoom.ru/b5050/236/374005-blackangel_1600x1200.jpg"
+          alt="Картинка монстра"
+        />
+        <div class="healthbar">
+          <div class="healthbar__value" :style="monsterBarStyles"></div>
+        </div>
+      </section>
+      <section id="player" class="container">
+        <h2>Ведьмак</h2>
+        <img
+          class="avatar"
+          src="https://img5.goodfon.ru/wallpaper/nbig/9/a8/the-witcher-3-wild-hunt-geralt-of-rivia-vedmak-3-dikaia-ok-1.jpg"
+          alt="картинка ведьмака"
+        />
+        <div class="healthbar">
+          <div class="healthbar__value" :style="playerBarStyles"></div>
+        </div>
+      </section>
+      <section class="container" v-if="winner">
+        <h2>БОЙ ОКОНЧЕН</h2>
+        <h3 v-if="winner == 'player' ">Вы победили!</h3>
+        <h3 v-if="winner == 'monster' ">Вы проиграли!</h3>
+        <h3 v-if="winner == 'withdraw' ">Это ничья!</h3>
+        <button @click="restartGame">НОВАЯ ИГРА</button>
+      </section>
+      <section id="controls" v-else>
+        <button @click="playerAttack">УДАР МЕЧОМ</button>
+        <button @click="playerSpell" :disabled="mayUseSkill">ЗАКЛИНАНИЕ</button>
+        <button @click="playerHeal" :disabled="mayUseSkill">ИСЦЕЛЕНИЕ</button>
+        <button @click="playerSurrender">УБЕЖАТЬ</button>
+      </section>
+      <section id="log" class="container">
+        <h2>Журнал битвы</h2>
+        <ul>
+          <li v-for="logMessage in logList">
+            <span
+              :class="{'log--player': logMessage.actionBy === 'player', 'log--monster': logMessage.actionBy === 'monster'}"
+            >
+              {{ logMessage.actionBy === 'player' ? 'Ведьмак' : 'Чудовище' }}
+            </span>
+            <span v-if="logMessage.actionType == 'attack'">
+              наносит удар, причинив
+              <span class="log--damage">{{ logMessage.actionValue }}</span>
+              урона
+            </span>
+            <span v-else>
+              исцеляет себя на
+              <span class="log--heal">{{ logMessage.actionValue }}</span> единиц
+            </span>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>
