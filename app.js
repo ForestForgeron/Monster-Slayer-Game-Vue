@@ -12,6 +12,7 @@ const app = Vue.createApp({
       logList: [],
     };
   },
+  
   methods: {
     playerAttack() {
       this.roundCount++;
@@ -20,11 +21,13 @@ const app = Vue.createApp({
       this.addLogToList("player", "attack", attackValue);
       this.monsterAttack();
     },
+
     monsterAttack() {
       const attackValue = getRandomValue(10, 20);
       this.playerHealth -= attackValue;
       this.addLogToList("monster", "attack", attackValue);
     },
+
     playerSpell() {
       this.roundCount++;
       const attackValue = getRandomValue(10, 30);
@@ -32,6 +35,7 @@ const app = Vue.createApp({
       this.addLogToList("player", "attack", attackValue);
       this.monsterAttack();
     },
+
     playerHeal() {
       this.roundCount++;
       const healValue = getRandomValue(20, 40);
@@ -45,9 +49,11 @@ const app = Vue.createApp({
       this.addLogToList("player", "heal", healValue);
       this.monsterAttack();
     },
+
     playerSurrender() {
       this.winner = "monster";
     },
+
     restartGame() {
       this.playerHealth = 100;
       this.monsterHealth = 100;
@@ -55,6 +61,7 @@ const app = Vue.createApp({
       this.winner = null;
       this.logList = [];
     },
+
     addLogToList(who, what, value) {
       this.logList.unshift({
         actionBy: who,
@@ -63,6 +70,7 @@ const app = Vue.createApp({
       });
     },
   },
+
   computed: {
     monsterBarStyles() {
       if (this.monsterHealth < 0) {
@@ -70,16 +78,19 @@ const app = Vue.createApp({
       }
       return { width: this.monsterHealth + "%" };
     },
+
     playerBarStyles() {
       if (this.playerHealth < 0) {
         return { width: "0%" };
       }
       return { width: this.playerHealth + "%" };
     },
+
     mayUseSkill() {
       return this.roundCount % 3 != 0;
     },
   },
+
   watch: {
     playerHealth(value) {
       if (value <= 0 && this.monsterHealth <= 0) {
@@ -88,6 +99,7 @@ const app = Vue.createApp({
         this.winner = "monster";
       }
     },
+
     monsterHealth(value) {
       if (value <= 0 && this.playerHealth <= 0) {
         this.winner = "withdraw";
